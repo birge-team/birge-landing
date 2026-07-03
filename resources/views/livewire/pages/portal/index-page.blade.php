@@ -66,7 +66,7 @@
         </div>
     </div>
 
-    <div class="analytics-telegram-transition relative h-screen md:h-auto z-[99] overflow-visible mt-[200px]">
+    <div class="analytics-telegram-transition relative h-screen md:h-auto z-[99] overflow-visible mt-[200px] md:mt-[80px]">
         <div class="telegram-bg absolute md:hidden inset-0 z-0 bg-azure-500"></div>
 
         <div class="telegram-vectors fixed inset-0 z-10 pointer-events-none opacity-0 h-[130dvh]">
