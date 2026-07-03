@@ -56,7 +56,7 @@
                     class="mb-8 max-w-5xl leading-none text-center transition-all duration-700 ease-out md:text-start">{{$article->getLocalizedValue('title')}}</h1>
                 <span x-data="revealOnScroll()"
                       :class="shown ? 'translate-y-0 opacity-100' : 'translate-y-10 opacity-0'"
-                      class="transition-all duration-700 ease-out max-w-2xl text-lg font-normal text-center">{{$article->getLocalizedValue('description')}}</span>
+                      class="transition-all duration-700 ease-out max-w-2xl text-lg font-normal text-center md:text-start">{{$article->getLocalizedValue('description')}}</span>
             </div>
         </div>
 

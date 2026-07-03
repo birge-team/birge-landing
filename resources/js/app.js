@@ -115,6 +115,9 @@ function scrollToTop() {
     });
 }
 
+let isInitialLoad = true;
+let welcomeAnimationDone = false;
+
 document.addEventListener('livewire:navigated', () => {
     setTimeout(() => {
         if (window.location.hash) {
@@ -124,11 +127,112 @@ document.addEventListener('livewire:navigated', () => {
 
         scrollToTop();
     }, 100);
+
+    if (isInitialLoad) {
+        isInitialLoad = false;
+        return;
+    } else {
+        welcomeAnimationDone = false;
+    }
+
+    setTimeout(startWelcomeAnimation, 100);
 });
+
+function startWelcomeAnimation() {
+
+    if (!welcomeAnimationDone) {
+
+
+        const welcomeTextLines = document.querySelectorAll('.welcome-text-line');
+        const expertItems = document.querySelectorAll('.welcome-expert-item');
+        const ctaButton = document.querySelector('.welcome-cta-button');
+
+        if (!welcomeTextLines.length) return;
+
+        // Animate text lines with curtain effect
+        gsap.fromTo(welcomeTextLines,
+            {y: '100%'},
+            {y: '0%', duration: 1, stagger: 0.15, ease: 'power3.out'}
+        );
+
+        if (expertItems.length > 0) {
+            // Animate expert blocks after text
+            gsap.fromTo(expertItems,
+                {
+                    y: '100%',
+                    opacity: 0,
+                    visibility: 'hidden'
+                },
+                {
+                    y: '0%',
+                    opacity: 1,
+                    visibility: 'visible',
+                    duration: 0.8,
+                    stagger: 0.1,
+                    ease: 'power3.out',
+                    delay: 0.8 // Start after text animation
+                }
+            );
+        }
+
+        if (ctaButton) {
+            gsap.fromTo(ctaButton,
+                {
+                    y: '100%',
+                    opacity: 0,
+                    visibility: 'hidden'
+                },
+                {
+                    y: '0%',
+                    opacity: 1,
+                    visibility: 'visible',
+                    duration: 0.8,
+                    ease: 'power3.out',
+                    delay: 1.25
+                }
+            );
+        }
+        welcomeAnimationDone = true;
+    }
+}
 
 document.addEventListener('DOMContentLoaded', () => {
     setTimeout(() => {
         scrollToHash(window.location.hash);
     }, 100);
+
+    // Welcome animation - start after preloader disappears
+    const preloader = document.getElementById('site-preloader');
+
+    if (preloader) {
+        // Simple polling approach - check every 100ms if preloader is removed
+        const checkInterval = setInterval(() => {
+            const currentPreloader = document.getElementById('site-preloader');
+            if (!currentPreloader) {
+                clearInterval(checkInterval);
+                setTimeout(startWelcomeAnimation, 500);
+            }
+        }, 100);
+
+        // Also check if preloader is hidden (has is-hidden class)
+        const checkHiddenInterval = setInterval(() => {
+            const currentPreloader = document.getElementById('site-preloader');
+            if (currentPreloader && currentPreloader.classList.contains('is-hidden')) {
+                clearInterval(checkHiddenInterval);
+                clearInterval(checkInterval);
+                setTimeout(startWelcomeAnimation, 500);
+            }
+        }, 100);
+
+        // Fallback: start after 5 seconds regardless
+        setTimeout(() => {
+            clearInterval(checkInterval);
+            clearInterval(checkHiddenInterval);
+            startWelcomeAnimation();
+        }, 5000);
+    } else {
+        // No preloader, start animation after 2 seconds
+        setTimeout(startWelcomeAnimation, 500);
+    }
 });
 

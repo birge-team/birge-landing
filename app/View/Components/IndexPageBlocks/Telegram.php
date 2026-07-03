@@ -2,6 +2,7 @@
 
 namespace App\View\Components\IndexPageBlocks;
 
+use App\Models\TelegramPost;
 use Closure;
 use Illuminate\Contracts\View\View;
 use Illuminate\View\Component;
@@ -12,9 +13,9 @@ class Telegram extends Component
     /**
      * Create a new component instance.
      */
-    public function __construct($telegramPosts)
+    public function __construct()
     {
-        $this->telegramPosts = $telegramPosts;
+        $this->telegramPosts = TelegramPost::query()->get()->toArray();
     }
 
     /**

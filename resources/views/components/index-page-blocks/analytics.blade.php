@@ -31,7 +31,7 @@
             :class="shown ? 'translate-y-0 opacity-100' : 'translate-y-10 opacity-0'"
             class="mb-11 text-azure-500 transition-all duration-700 ease-out"
         >
-            Исследования и аналитика
+            {{ __('portal.analytics_title') }}
         </h2>
 
         <div
@@ -78,7 +78,7 @@
 
                     <div class="absolute inset-0 flex items-center justify-center">
             <span class="rounded-full bg-mint-500 px-4 py-2 font-semibold text-lg text-black backdrop-blur">
-                Читать
+                {{ __('portal.read') }}
             </span>
                     </div>
                 </div>
@@ -111,7 +111,7 @@
             @endforeach
         </div>
 
-        <x-Ui.link href="{{route('portal.article_list')}}" class="md:w-full md:py-[13px] px-8 py-4" type="teal">Смотреть все статьи</x-Ui.link>
+        <x-Ui.link href="{{route('portal.article_list')}}" class="md:w-full md:py-[13px] px-8 py-4" type="teal">{{ __('portal.view_all_articles') }}</x-Ui.link>
     </div>
 </section>
 

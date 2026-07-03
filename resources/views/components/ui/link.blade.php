@@ -93,7 +93,7 @@
         <span class="relative block h-[1em] overflow-hidden leading-none pr-[0.14em]">
 
             <span
-                class="block whitespace-nowrap tracking-[-0.1em]"
+                class="block whitespace-nowrap tracking-[-0.12em]"
                 aria-label="{{ $text }}"
             >
                 @foreach($letters as $i => $letter)
@@ -114,7 +114,7 @@
             </span>
 
             <span
-                class="absolute inset-0 block whitespace-nowrap tracking-[-0.1em]"
+                class="absolute inset-0 block whitespace-nowrap tracking-[-0.12em]"
                 aria-hidden="true"
             >
                 @foreach($letters as $i => $letter)

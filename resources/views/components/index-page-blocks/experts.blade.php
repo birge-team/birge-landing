@@ -27,7 +27,7 @@
         <div
             x-data="revealOnScroll(150)"
             :class="shown ? 'translate-y-0 opacity-100' : 'translate-y-10 opacity-0'"
-            class="swiper team-swiper transition-all duration-700 ease-out"
+            class="swiper team-swiper transition-all duration-700 ease-out md:!overflow-visible"
         >
             <div class="swiper-wrapper">
                 @foreach($experts as $expert)
