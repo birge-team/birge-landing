@@ -2,31 +2,31 @@
     $menu = [
         [
             'key' => 'about',
-            'title' => 'О компании',
+            'title' => __('portal.menu.about'),
             'href' => route('portal.index') . '#about',
             'anchor' => true,
         ],
         [
             'key' => 'team',
-            'title' => 'Команда',
+            'title' => __('portal.menu.team'),
             'href' => route('portal.index') . '#team',
             'anchor' => true,
         ],
         [
             'key' => 'services',
-            'title' => 'Услуги',
+            'title' => __('portal.menu.services'),
             'href' => route('portal.index') . '#articles',
             'anchor' => true,
         ],
         [
             'key' => 'articles',
-            'title' => 'Статьи',
+            'title' => __('portal.menu.articles'),
             'href' => route('portal.article_list'),
             'navigate' => true,
         ],
         [
             'key' => 'platform',
-            'title' => 'Платформа Бирге',
+            'title' => __('portal.menu.platform'),
             'href' => route('portal.index') . '#platform',
             'anchor' => true,
         ],
@@ -110,7 +110,7 @@
 
             <div class="flex items-center gap-8 lg:gap-5">
                 <x-Ui.link class="lg:hidden px-4 py-3" type="teal">
-                    Связаться с нами
+                    {{ __('portal.contact_us') }}
                 </x-Ui.link>
 
                 {{-- Lang --}}
@@ -177,7 +177,7 @@
                     @click="menuOpen = true"
                     :class="isHome ? 'text-white' : 'text-azure-500'"
                     class="hidden h-10 w-10 flex-col items-center justify-center gap-1.5 lg:flex"
-                    aria-label="Открыть меню"
+                    aria-label="{{ __('portal.open_menu') }}"
                 >
                     <span class="block h-[2px] w-7 rounded-full bg-current"></span>
                     <span class="block h-[2px] w-7 rounded-full bg-current"></span>
@@ -216,7 +216,7 @@
                 type="button"
                 @click="menuOpen = false; unlockScroll()"
                 class="absolute right-4 top-12 h-8 w-8"
-                aria-label="Закрыть меню"
+                aria-label="{{ __('portal.close_menu') }}"
             >
                 <span class="absolute left-1/2 top-1/2 block h-[2px] w-8 -translate-x-1/2 -translate-y-1/2 rotate-45 bg-azure-500"></span>
                 <span class="absolute left-1/2 top-1/2 block h-[2px] w-8 -translate-x-1/2 -translate-y-1/2 -rotate-45 bg-azure-500"></span>
@@ -238,7 +238,7 @@
 
             <div class="mt-auto mb-8">
                 <x-Ui.link class="w-full py-3 justify-center" type="teal">
-                    Связаться с нами
+                    {{ __('portal.contact_us') }}
                 </x-Ui.link>
             </div>
         </div>

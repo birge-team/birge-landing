@@ -6,7 +6,7 @@
             class="mb-10 flex items-center justify-between transition-all duration-700 ease-out md:flex-col md:items-start md:gap-4"
         >
             <h2 class="">
-                Наш Telegram-канал
+                {{ __('portal.telegram_title') }}
             </h2>
 
             <x-Ui.link :navigate="false" href="https://t.me/birge_team" target="_blank" type="mint" class=" px-8 py-4 md:hidden !text-azure-500 fill-azure-500 z-40 relative">
@@ -17,7 +17,7 @@
                     </svg>
                 </x-slot:icon>
 
-                Подписаться
+                {{ __('portal.subscribe') }}
             </x-Ui.link>
         </div>
 
@@ -60,15 +60,15 @@
                transition-[transform,opacity,scale]
                duration-75 ease-out"
                     >
-                        Читать статью
+                        {{ __('portal.read_article') }}
                     </a>
 
                     <h3 class="text-xl z-40 md:text-base leading-[120%] font-normal">
-                        {!! $post['title'] !!}
+                        {!! $post['text'] !!}
                     </h3>
 
                     <p class="mt-5 text-base font-light text-white/60 md:text-sm">
-                        {{ $post['date'] }}
+                        {{ \Carbon\Carbon::parse($post['published_at'])->format('d.m.Y') }}
                     </p>
                 </article>
             @endforeach
@@ -79,7 +79,7 @@
                             <path fill-rule="evenodd" clip-rule="evenodd" d="M16.6297 0.108421C16.8578 0.01242 17.1075 -0.0206901 17.3527 0.0125366C17.5979 0.0457632 17.8298 0.144112 18.0241 0.297347C18.2184 0.450582 18.3681 0.653101 18.4576 0.883824C18.5471 1.11455 18.5731 1.36504 18.533 1.60923L16.4396 14.307C16.2365 15.5319 14.8926 16.2343 13.7693 15.6242C12.8297 15.1138 11.4341 14.3274 10.1788 13.5068C9.55118 13.0961 7.62855 11.7808 7.86484 10.8448C8.06791 10.0446 11.2984 7.03744 13.1444 5.24957C13.869 4.54716 13.5386 4.14196 12.6829 4.78807C10.5582 6.39226 7.14674 8.83177 6.01883 9.51848C5.02383 10.124 4.5051 10.2274 3.88484 10.124C2.75323 9.93568 1.70377 9.64401 0.847218 9.28866C-0.310234 8.80869 -0.253931 7.21743 0.846295 6.75408L16.6297 0.108421Z" fill="#112E3B"/>
                         </svg>
                     </x-slot:icon>
-                    Подписаться
+                    {{ __('portal.subscribe') }}
                 </x-Ui.link>
         </div>
     </div>

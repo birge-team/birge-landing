@@ -53,7 +53,7 @@
 
     <x-index-page-blocks.welcome :first-article="$articles[0]"/>
 
-    <div class="team-about-transition relative h-screen overflow-hidden md:h-auto md:overflow-visible z-[99]">
+    <div class="team-about-transition relative h-screen overflow-visible md:h-auto md:overflow-visible pt-[10%] z-[99]">
         <div class="transition-bg absolute inset-0 z-0 0"></div>
 
         <div class="team-layer absolute inset-0 z-20 md:relative md:inset-auto md:z-auto">
@@ -61,12 +61,12 @@
         </div>
 
         <div
-            class="about-layer absolute inset-0 z-30 pointer-events-none md:relative md:inset-auto md:z-auto md:pointer-events-auto">
+            class="about-layer absolute inset-x-0 top-1/2 -translate-y-1/2 z-30 pointer-events-none md:relative md:inset-auto md:z-auto md:pointer-events-auto md:top-auto md:translate-y-0 top-[70%]">
             <x-index-page-blocks.expertise :expertise="$expertise"/>
         </div>
     </div>
 
-    <div class="analytics-telegram-transition relative h-screen md:h-auto z-[99] overflow-visible ">
+    <div class="analytics-telegram-transition relative h-screen md:h-auto z-[99] overflow-visible mt-[200px]">
         <div class="telegram-bg absolute md:hidden inset-0 z-0 bg-azure-500"></div>
 
         <div class="telegram-vectors fixed inset-0 z-10 pointer-events-none opacity-0 h-[130dvh]">
@@ -99,7 +99,7 @@
         </div>
 
         <div class="telegram-layer absolute inset-0 z-30 pointer-events-none md:relative">
-            <x-index-page-blocks.telegram :telegramPosts="$telegramPosts"/>
+            <x-index-page-blocks.telegram/>
         </div>
     </div>
 
@@ -167,7 +167,7 @@
                 scrollTrigger: {
                     id: 'team-about-transition-main',
                     trigger: wrapper,
-                    start: 'top top',
+                    start: '20% top',
                     end: () => isMobile
                         ? `+=${window.innerHeight * 0.5}`
                         : `+=${window.innerHeight * 0.7 + getScrollDistance()}`,
@@ -441,11 +441,11 @@
             }, '<');
 
             // удерживаем Telegram на экране
-            if (!isMobile) {
-                tl.to({}, {
-                    duration: 0.8,   // чем больше число, тем дольше он будет закреплен
-                });
-            }
+            // if (!isMobile) {
+            //     tl.to({}, {
+            //         duration: 0.8,   // чем больше число, тем дольше он будет закреплен
+            //     });
+            // }
 
             ScrollTrigger.refresh();
         }

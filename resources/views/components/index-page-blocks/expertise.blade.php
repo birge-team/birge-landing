@@ -51,7 +51,7 @@
             :class="shown ? 'translate-y-0 opacity-100' : 'translate-y-10 opacity-0'"
             class="text-azure-500 transition-all duration-700 ease-out mb-10"
         >
-            Области нашей экспертизы
+            {{ __('portal.expertise_title') }}
         </h2>
 
         <div
@@ -62,13 +62,9 @@
             <div class="about-track flex md:flex-col gap-4 will-change-transform">
                 @foreach($expertise as $key => $item)
                     @php
-                        $subject = 'Обращение с сайта birgeteam.com';
+                        $subject = __('portal.email_subject');
 
-                        $body = "Добрый день!\n\n";
-                        $body .= "Меня зовут ..\n";
-                        $body .= "Компания ..\n\n";
-                        $body .= "Интересно узнать {$item['mail_title']}\n\n";
-                        $body .= "Свяжитесь со мной, пожалуйста, по номеру …";
+                        $body = __('portal.email_body', ['service' => $item['mail_title']]);
 
                         $mailto = 'mailto:info@birgeteam.com?subject='
                             . rawurlencode($subject)
@@ -78,7 +74,14 @@
 
 
                     <article
-                        class="@if($loop->even) mt-10 md:mt-0 @endif p-6 md:p-4 birge-soft-card relative flex h-[520px] w-[520px] md:w-full md:min-w-0 md:min-h-[328px] md:h-auto min-w-[520px] aspect-square md:hover:aspect-auto flex-col justify-end rounded-lg bg-[#D3DCCB] group hover:bg-mint-800"
+                        x-data="{
+                            get minH() {
+                                return window.innerWidth < 768 ? this.$el.offsetWidth + 'px' : null;
+                            }
+                        }"
+                        x-init="$el.style.minHeight = minH"
+                        @resize.window="$el.style.minHeight = minH"
+                        class="@if($loop->even) mt-10 md:mt-0 @endif p-6 md:p-4 birge-soft-card relative flex h-[520px] w-[520px] md:w-full md:min-w-0 md:h-auto min-w-[520px] aspect-square md:hover:aspect-auto flex-col justify-end rounded-lg bg-[#D3DCCB] group hover:bg-mint-800"
                     >
                         <img src="/fixed/expertise/expertise-{{$key + 1}}.1.svg" class="absolute {{$item['bg-class']}} transition group-hover:opacity-0" alt="">
                         <img src="/fixed/expertise/expertise-{{$key + 1}}.2.svg" class="absolute {{$item['bg-class']}} transition group-hover:opacity-0" alt="">
@@ -106,7 +109,7 @@
                                 href="{{ $mailto }}"
                                 class="w-full py-4 rounded-[26px] text-base leading-[100%] md:leading-3 bg-white font-medium text-center text-azure-600 md:text-sm"
                             >
-                                Запросить консультацию
+                                {{ __('portal.request_consultation') }}
                             </a>
 
                         </div>

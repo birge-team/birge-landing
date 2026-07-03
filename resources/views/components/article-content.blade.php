@@ -10,7 +10,7 @@
                     class="transition-all duration-700 ease-out"
                 >
                     <h2 id="{{Str::slug($topic['title'])}}" class="text-black font-medium text-2xl scroll-mt-12 mb-6 md:text-[16px]">{{$topic['title']}}</h2>
-                    <p class="text-xl md:text-sm">
+                    <p class="text-xl md:text-base leading-[160%]">
                         {!! $topic['text'] !!}
                     </p>
 

@@ -1,26 +1,35 @@
 <section class="flex items-center min-h-screen text-white md:pb-0 ">
+    <style>
+        .welcome-text-line {
+            transform: translateY(100%);
+        }
+        .welcome-expert-item,
+        .welcome-cta-button {
+            opacity: 0;
+            visibility: hidden;
+            transform: translateY(100%);
+        }
+    </style>
     <div
         class="mx-auto flex justify-between container gap-16 transition-all lg:flex-col lg:gap-10 lg:mt-32">
         <div
-            x-data="revealOnScroll(100)"
-            :class="shown ? 'translate-y-0 opacity-100' : 'translate-y-10 opacity-0'"
             class="transition-all duration-900 ease-out z-20 max-w-[883px]"
         >
-            <h1 class="text-white min-w-max leading-[55px] lg:leading-none md:!leading-tight xl:!min-w-0 mb-16">
-                Команда профессионалов в области<br class="md:hidden">
-                организационного дизайна,<br class="md:hidden">
-                вознаграждения и формирования<br>
-                управленческих команд<br>
+            <h1 class="text-white min-w-max leading-[100%] lg:leading-none md:!leading-tight xl:!min-w-0 mb-16 welcome-text">
+                <div class="overflow-hidden"><span class="welcome-text-line inline-block">{{ __('portal.title.line1') }}</span></div>
+                <div class="overflow-hidden"><span class="welcome-text-line inline-block">{{ __('portal.title.line2') }}</span></div>
+                <div class="overflow-hidden"><span class="welcome-text-line inline-block">{{ __('portal.title.line3') }}</span></div>
+                <div class="overflow-hidden"><span class="welcome-text-line inline-block">{{ __('portal.title.line4') }}</span></div>
             </h1>
 
             <div class="grid max-w-4xl grid-cols-[max-content_max-content] gap-x-14 gap-y-7 md:grid-cols-1 mb-16">
                 @foreach([
-                    ['title' => '15+ экспертов', 'text' => 'Команда Birge в Алматы и Москве'],
-                    ['title' => 'География проектов', 'text' => 'Россия, Казахстан, Узбекистан'],
-                    ['title' => 'Международный опыт', 'text' => 'Korn Ferry Hay Group и Spencer Stuart'],
-                    ['title' => 'Глобальная сеть партнёров', 'text' => 'Доступ к практической экспертизе'],
+                    ['title' => __('portal.stats.experts.title'), 'text' => __('portal.stats.experts.text')],
+                    ['title' => __('portal.stats.geography.title'), 'text' => __('portal.stats.geography.text')],
+                    ['title' => __('portal.stats.experience.title'), 'text' => __('portal.stats.experience.text')],
+                    ['title' => __('portal.stats.partners.title'), 'text' => __('portal.stats.partners.text')],
                 ] as $item)
-                    <div class="flex gap-3">
+                    <div class="welcome-expert-item flex gap-3">
                         <svg width="18" height="20" viewBox="0 0 18 20" fill="none" xmlns="http://www.w3.org/2000/svg">
                             <path
                                 d="M17.9144 10.1815C13.1164 10.3978 9.40165 14.5067 9.61999 19.356L7.87525 19.4346L7.50353 11.1782C7.49122 10.9048 7.26143 10.6926 6.99094 10.7048L0.0796564 11.0164L0.000271887 9.25302C4.79826 9.03671 8.513 4.92789 8.29468 0.0786539L10.0394 -2.97608e-06L10.4111 8.25635C10.4234 8.52973 10.6532 8.74195 10.9237 8.72975L17.835 8.41817L17.9144 10.1815Z"
@@ -38,7 +47,13 @@
                 @endforeach
             </div>
 
-            <x-Ui.link type="mint" class="px-8 py-4 md:w-full">Запросить консультацию</x-Ui.link>
+            <div class="overflow-hidden inline-block md:block">
+                <div class="welcome-cta-button">
+                    <x-Ui.link type="mint" class="px-8 py-4 md:w-full">
+                        {{ __('portal.request_consultation') }}
+                    </x-Ui.link>
+                </div>
+            </div>
 
         </div>
 
@@ -53,7 +68,7 @@
     y: 0,
 
     init() {
-        setTimeout(() => this.shown = true, 2000)
+        setTimeout(() => this.shown = true, 3000)
     },
 
     move(e) {
@@ -118,7 +133,7 @@
                 :class="expanded ? 'opacity-100' : 'opacity-0'"
                 class="px-5 text-white transition-opacity duration-200 delay-150"
             >
-                Читать статью
+                {{ __('portal.read_article') }}
             </span>
         </span>
     </span>
@@ -143,7 +158,7 @@
                     href="{{ route('portal.article', $firstArticle->id) }}"
                     class="hidden md:block text-white underline text-sm"
                 >
-                    Читать статью
+                    {{ __('portal.read_article') }}
                 </a>
             </article>
         </div>
