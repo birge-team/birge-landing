@@ -49,10 +49,10 @@ class ArticleForm
                     ->maxLength(255)
                     ->label($titleLabel),
 
-                TextInput::make("slug.$locale")
-                    ->required()
-                    ->maxLength(255)
-                    ->label('Slug'),
+//                TextInput::make("slug.$locale")
+//                    ->required()
+//                    ->maxLength(255)
+//                    ->label('Slug'),
 
                 TextInput::make("description.$locale")
                     ->required()
