@@ -516,7 +516,8 @@ class DatabaseSeeder extends Seeder
             $expertCreated = Expert::create($expert);
 
             $key = $key + 1;
-            $expertCreated->addMediaFromUrl(config('app.url') . "/tmp/expert-$key.png")
+            $expertCreated->addMedia(public_path("tmp/expert-$key.png"))
+                ->preservingOriginal()
                 ->toMediaCollection('image');
         }
 
@@ -552,7 +553,8 @@ class DatabaseSeeder extends Seeder
             ]);
 
             $key = $key + 1;
-            $articleCreated->addMediaFromUrl(config('app.url') . "/tmp/article-cover-$key.png")
+            $articleCreated->addMedia(public_path("tmp/article-cover-$key.png"))
+                ->preservingOriginal()
                 ->toMediaCollection('cover');
         }
 
