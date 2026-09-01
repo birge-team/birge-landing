@@ -558,8 +558,8 @@ class DatabaseSeeder extends Seeder
                 ->toMediaCollection('cover');
         }
 
-        $email = config('app.env') == ('local') ? 'admin@mail.ru' : config('admin.email');
-        $password = config('app.env') == ('local') ? '12345678' : config('admin.password');
+        $email = config('app.env') == ('local') ? 'admin@mail.ru' : config('app.admin.email');
+        $password = config('app.env') == ('local') ? '12345678' : config('app.admin.password');
         $admin = User::create([
             'name' => 'admin',
             'email' => $email,
