@@ -21,7 +21,7 @@
     <div class="pt-4 flex flex-col gap-4 flex-1">
             <span
                 class="leading-[130%] text-sm {{$classes['category']}} uppercase w-fit md:text-[11px] md:mb-3">
-            {{ $article->category->name }} / {{ $article['date'] }}
+            {{ $article->category->localizedName() }} / {{ $article['date'] }}
         </span>
         <h3 class="{{$classes['text']}} text-[22px] leading-[110%] font-semibold max-w-[443px] line-clamp-2 md:text-[17px]">
             {{$article->getLocalizedValue('title')}}

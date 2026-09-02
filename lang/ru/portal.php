@@ -40,12 +40,13 @@ return [
     ],
     'request_consultation' => 'Запросить консультацию',
     'read_article' => 'Читать статью',
+    'portal.experts.title' => 'Эксперты Birge',
 
     // Expertise
     'expertise_title' => 'Области нашей экспертизы',
     'request_consultation' => 'Запросить консультацию',
     'email_subject' => 'Обращение с сайта birgeteam.com',
-    'email_body' => "Добрый день!\n\nМеня зовут ..\nКомпания ..\n\nИнтересно узнать {service}\n\nСвяжитесь со мной, пожалуйста, по номеру …",
+    'email_body' => "Добрый день!\n\nМеня зовут ..\nКомпания ..\n\nИнтересно узнать :service\n\nСвяжитесь со мной, пожалуйста, по номеру …",
     'items' => [
         [
             'title' => 'Организационный дизайн <br> и управление вознаграждением',
@@ -75,6 +76,19 @@ return [
 
     // Analytics
     'analytics_title' => 'Исследования и аналитика',
+    'article_filters' => [
+        'all' => 'Все статьи',
+        'selected' => 'Выбрано: :count',
+    ],
+    'article_categories' => [
+        'organizational_design' => 'Организационный дизайн',
+        'corporate_governance' => 'Корпоративное управление',
+        'compensation' => 'Вознаграждение',
+        'career' => 'Карьера',
+        'lifestyle' => 'Lifestyle',
+    ],
+    'back' => 'Назад',
+    'other_articles' => 'Другие статьи',
     'read' => 'Читать',
     'view_all_articles' => 'Смотреть все статьи',
 

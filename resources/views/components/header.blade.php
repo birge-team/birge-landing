@@ -108,8 +108,23 @@
                 @endforeach
             </nav>
 
+            @php
+                $subject = __('portal.email_subject');
+                $body = __('portal.email_body', ['service' => '']);
+
+                $mailto = 'mailto:info@birgeteam.com?subject='
+                    . rawurlencode($subject)
+                    . '&body='
+                    . rawurlencode(strip_tags($body));
+            @endphp
+
             <div class="flex items-center gap-8 lg:gap-5">
-                <x-Ui.link class="lg:hidden px-4 py-3" type="teal">
+                <x-Ui.link
+                    :href="$mailto"
+                    :navigate="false"
+                    class="lg:hidden px-4 py-3"
+                    type="teal"
+                >
                     {{ __('portal.contact_us') }}
                 </x-Ui.link>
 
@@ -237,7 +252,12 @@
             </nav>
 
             <div class="mt-auto mb-8">
-                <x-Ui.link class="w-full py-3 justify-center" type="teal">
+                <x-Ui.link
+                    :href="$mailto"
+                    :navigate="false"
+                    class="w-full py-3 justify-center"
+                    type="teal"
+                >
                     {{ __('portal.contact_us') }}
                 </x-Ui.link>
             </div>

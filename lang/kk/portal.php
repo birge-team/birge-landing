@@ -45,7 +45,7 @@ return [
     'expertise_title' => 'Біздің сараптама салалары',
     'request_consultation' => 'Кеңес сұрау',
     'email_subject' => 'birgeteam.com сайтынан хабарлама',
-    'email_body' => "Сәлеметсіз бе!\n\nМенің атым ..\nКомпания ..\n\n{service} туралы білу қызықты\n\nМенімен телефон нөмірі арқылы байланысыңыз …",
+    'email_body' => "Сәлеметсіз бе!\n\nМенің атым ..\nКомпания ..\n\n:service туралы білу қызықты\n\nМенімен телефон нөмірі арқылы байланысыңыз …",
 
     // Expertise items
     'items' => [
@@ -77,6 +77,19 @@ return [
 
     // Analytics
     'analytics_title' => 'Зерттеулер және аналитика',
+    'article_filters' => [
+        'all' => 'Барлық мақалалар',
+        'selected' => 'Таңдалды: :count',
+    ],
+    'article_categories' => [
+        'organizational_design' => 'Ұйымдастырушылық дизайн',
+        'corporate_governance' => 'Корпоративтік басқару',
+        'compensation' => 'Сыйақы',
+        'career' => 'Мансап',
+        'lifestyle' => 'Өмір салты',
+    ],
+    'back' => 'Артқа',
+    'other_articles' => 'Басқа мақалалар',
     'read' => 'Оқу',
     'view_all_articles' => 'Барлық мақалаларды қарау',
 

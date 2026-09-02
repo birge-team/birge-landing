@@ -42,12 +42,12 @@
                             />
                         </svg>
 
-                        <span>Назад</span>
+                        <span>{{ __('portal.back') }}</span>
                     </a>
 
                     <span
                         class="mx-auto  px-3 py-2 text-sm text-center text-azure-500/40 uppercase w-fit md:px-0 md:text-start md:mx-0">
-                    {{ $article->category->name }} / {{ $article['date'] }}
+                    {{ $article->category->localizedName() }} / {{ $article['date'] }}
                 </span>
                 </div>
 
@@ -74,7 +74,7 @@
         class="container mb-6 flex flex-col gap-4 border-b border-black/40 pb-[150px] md:pb-[80px] transition-all duration-700 ease-out"
     >
         <div class="mb-10 flex items-center justify-between md:mb-6">
-            <h2 class="text-nowrap text-black">Другие статьи</h2>
+            <h2 class="text-nowrap text-black">{{ __('portal.other_articles') }}</h2>
         </div>
 
         <div class="swiper other-articles-swiper w-full overflow-hidden">

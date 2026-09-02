@@ -73,7 +73,20 @@ function scrollToHash(hash) {
     }
 
     const headerOffset = 90;
-    const top = target.getBoundingClientRect().top + window.scrollY - headerOffset;
+    let top = target.getBoundingClientRect().top + window.scrollY - headerOffset;
+
+    // The expertise section is inside a pinned GSAP timeline. Its DOM position
+    // points to the beginning of the transition, where the section is hidden.
+    if (hash === '#about' && window.innerWidth >= 768) {
+        const trigger = window.ScrollTrigger?.getById('team-about-transition-main');
+        const aboutScroll = trigger?.labelToScroll?.('about-ready');
+
+        if (aboutScroll > 0) {
+            top = aboutScroll;
+        } else if (trigger) {
+            top = trigger.start + (trigger.end - trigger.start) * 0.6;
+        }
+    }
 
     window.scrollTo({
         top,
@@ -235,4 +248,3 @@ document.addEventListener('DOMContentLoaded', () => {
         setTimeout(startWelcomeAnimation, 500);
     }
 });
-

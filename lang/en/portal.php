@@ -13,6 +13,8 @@ return [
     'open_menu' => 'Open Menu',
     'close_menu' => 'Close Menu',
 
+    'experts.title' => 'Birge experts',
+
     // Welcome
     'title' => [
         'line1' => 'A team of professionals in',
@@ -45,7 +47,7 @@ return [
     'expertise_title' => 'Our Areas of Expertise',
     'request_consultation' => 'Request Consultation',
     'email_subject' => 'Inquiry from birgeteam.com',
-    'email_body' => "Hello!\n\nMy name is ..\nCompany ..\n\nInterested to learn about {service}\n\nPlease contact me at number …",
+    'email_body' => "Hello!\n\nMy name is ..\nCompany ..\n\nInterested to learn about :service\n\nPlease contact me at number …",
 
     // Expertise items
     'items' => [
@@ -77,6 +79,19 @@ return [
 
     // Analytics
     'analytics_title' => 'Research and Analytics',
+    'article_filters' => [
+        'all' => 'All Articles',
+        'selected' => 'Selected: :count',
+    ],
+    'article_categories' => [
+        'organizational_design' => 'Organizational Design',
+        'corporate_governance' => 'Corporate Governance',
+        'compensation' => 'Compensation',
+        'career' => 'Career',
+        'lifestyle' => 'Lifestyle',
+    ],
+    'back' => 'Back',
+    'other_articles' => 'Other Articles',
     'read' => 'Read',
     'view_all_articles' => 'View All Articles',
 

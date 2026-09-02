@@ -224,6 +224,7 @@
                     aboutLayer.style.pointerEvents = 'none';
                 },
             });
+            tl.addLabel('about-ready');
             tl.to(track, {
                 x: () => -getScrollDistance(),
                 ease: 'none',

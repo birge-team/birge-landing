@@ -7,10 +7,27 @@
 
     <title>{{ config('app.name', 'Laravel') }}</title>
 
-    <!-- Fonts -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Roboto+Flex:opsz,wght,XOPQ,XTRA,YOPQ,YTDE,YTFI,YTLC,YTUC@8..144,100..1000,96,468,79,-203,738,514,712&display=swap" rel="stylesheet">
+    <style>
+        @font-face {
+            font-family: 'Roboto';
+            src: url('/fixed/fonts/Roboto/Roboto-VariableFont_wdth,wght.ttf') format('truetype');
+            font-style: normal;
+            font-weight: 100 900;
+            font-display: swap;
+        }
+
+        @font-face {
+            font-family: 'Roboto';
+            src: url('/fixed/fonts/Roboto/Roboto-Italic-VariableFont_wdth,wght.ttf') format('truetype');
+            font-style: italic;
+            font-weight: 100 900;
+            font-display: swap;
+        }
+
+        body {
+            font-family: 'Roboto', sans-serif;
+        }
+    </style>
     <!-- Scripts -->
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>

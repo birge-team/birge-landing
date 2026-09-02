@@ -22,7 +22,7 @@
 @endphp
 
 <a
-    href="{{ $href }}"
+    href="{{ htmlspecialchars_decode($href, ENT_QUOTES) }}"
     @if($navigate) wire:navigate @endif
     x-data="{ active: false, ready: true }"
     @mouseenter="

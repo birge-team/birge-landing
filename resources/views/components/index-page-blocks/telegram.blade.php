@@ -50,7 +50,8 @@
                 >
                     <a
                         x-ref="link"
-                        href="/"
+                        target="_blank"
+                        href="https://t.me/birge_team/{{$post['telegram_message_id']}}"
                         wire:navigate
                         :style="`transform: translate(${x}px, ${y}px) translate(-50%, -50%)`"
                         :class="hover ? 'opacity-100 scale-100' : 'opacity-0 scale-75'"

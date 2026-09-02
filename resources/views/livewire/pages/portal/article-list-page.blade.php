@@ -12,38 +12,38 @@
              class="pointer-events-none absolute right-[12%] top-[45vh] z-10 blur-[200px]"
              alt="">
     </div>
-    <h2 class="text-white mb-8">Исследования и аналитика</h2>
+    <h2 class="text-white mb-8">{{ __('portal.analytics_title') }}</h2>
     @php
         $filterItems = collect([
             [
                 'id' => null,
-                'title' => 'Все статьи',
+                'title' => __('portal.article_filters.all'),
                 'active' => empty($activeCategoryIds),
                 'action' => 'showAllArticles',
             ],
         ])->merge(
             $categories->map(fn ($category) => [
                 'id' => $category->id,
-                'title' => $category->name,
+                'title' => $category->localizedName(),
                 'active' => in_array($category->id, $activeCategoryIds, true),
                 'action' => 'toggleCategory(' . $category->id . ')',
             ])
         );
 
-        $activeTitle = $filterItems->firstWhere('active', true)['title'] ?? 'Все статьи';
+        $activeTitle = $filterItems->firstWhere('active', true)['title'] ?? __('portal.article_filters.all');
     @endphp
 
     @php
         $selectedCount = count($activeCategoryIds);
 
         if ($selectedCount === 0) {
-            $activeTitle = 'Все статьи';
+            $activeTitle = __('portal.article_filters.all');
         } elseif ($selectedCount === 1) {
             $activeTitle = $categories
                 ->firstWhere('id', $activeCategoryIds[0])
-                ?->name ?? 'Все статьи';
+                ?->localizedName() ?? __('portal.article_filters.all');
         } else {
-            $activeTitle = "Выбрано: {$selectedCount}";
+            $activeTitle = __('portal.article_filters.selected', ['count' => $selectedCount]);
         }
     @endphp
 

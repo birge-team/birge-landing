@@ -4,7 +4,7 @@
             class="mb-9 flex items-center justify-between transition-all duration-700 ease-out"
         >
             <h2 class="">
-                Эксперты Birge
+                @lang('portal.experts.title')
             </h2>
 
             <div class="flex gap-2 md:hidden">
