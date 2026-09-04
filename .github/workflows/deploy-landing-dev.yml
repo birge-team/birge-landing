@@ -31,9 +31,12 @@ jobs:
       # blacklist: dist/ gets only the dirs Laravel actually needs at
       # runtime, so any new dev-only file added to the repo root (configs,
       # docs, tooling) is excluded by default instead of needing a matching
-      # --exclude added here. storage/{framework,logs,app/public} are
-      # server-owned runtime state that must survive redeploys untouched
-      # (framework cache/session/view cache, logs, uploaded media).
+      # --exclude added here. composer.json IS needed at runtime (not just
+      # by composer) -- Application::getNamespace() reads it directly on
+      # every Blade component-tag compile; removing it 500s the whole app.
+      # storage/{framework,logs,app/public} are server-owned runtime state
+      # that must survive redeploys untouched (framework cache/session/view
+      # cache, logs, uploaded media).
       - name: Build deploy payload
         run: |
           set -euo pipefail
@@ -43,6 +46,7 @@ jobs:
             --exclude='/storage/logs/***' \
             --exclude='/storage/app/public/***' \
             --include='/artisan' \
+            --include='/composer.json' \
             --include='/app/' --include='/app/**' \
             --include='/bootstrap/' --include='/bootstrap/**' \
             --include='/config/' --include='/config/**' \
