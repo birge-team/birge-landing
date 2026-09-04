@@ -27,8 +27,8 @@
         [
             'key' => 'platform',
             'title' => __('portal.menu.platform'),
-            'href' => route('portal.index') . '#platform',
-            'anchor' => true,
+            'href' => 'https://login.birgeteam.com/login/',
+            'anchor' => false,
         ],
     ];
 @endphp
