@@ -2,7 +2,7 @@ name: Deploy landing to dev
 
 on:
   push:
-    branches: [main]
+    branches: [master]
   workflow_dispatch: {}
 
 jobs:
