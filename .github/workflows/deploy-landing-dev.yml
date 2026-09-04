@@ -1,0 +1,90 @@
+name: Deploy landing to dev
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch: {}
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.3'
+          tools: composer
+
+      - run: composer install --no-dev --optimize-autoloader --no-interaction
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - run: npm ci
+      - run: npm run build
+
+      # Build in CI, upload the built artifact only -- no composer/npm needed
+      # on the server, mirrors birge-be's pattern. Excludes: .git (not
+      # served), node_modules (not needed at runtime), tests, and anything
+      # that's either a secret (.env) or server-owned runtime state that
+      # must survive redeploys untouched (uploaded media, framework
+      # cache/session/view cache, logs).
+      - name: Build deploy payload
+        run: |
+          set -euo pipefail
+          mkdir -p dist
+          rsync -a \
+            --exclude=.git \
+            --exclude=node_modules \
+            --exclude=tests \
+            --exclude=.env \
+            --exclude=.env.example \
+            --exclude=storage/app/public \
+            --exclude=storage/framework \
+            --exclude=storage/logs \
+            --exclude=dist \
+            . dist/
+
+      - name: Deploy to landing-dev.birgeteam.com over SFTP
+        uses: wlixcc/SFTP-Deploy-Action@v1.2.6
+        with:
+          username: ${{ secrets.LANDING_DEV_SFTP_USERNAME }}
+          server: ${{ secrets.LANDING_DEV_SFTP_HOST }}
+          ssh_private_key: ${{ secrets.LANDING_DEV_SFTP_KEY }}
+          port: ${{ secrets.LANDING_DEV_SFTP_PORT }}
+          local_path: './dist/*'
+          # Path is relative to the SFTP user's chroot (/var/www/birge-landing-dev),
+          # so this lands the payload under /var/www/birge-landing-dev/www/.
+          remote_path: '/www/'
+          sftp_only: true
+
+      # PHP-FPM runs as a different system user than the SFTP deploy account.
+      # The SFTP client above sets 0755 on every directory it uploads
+      # (bypassing the server's umask), so PHP-FPM can't create its own
+      # runtime cache dirs under storage/framework/ or bootstrap/cache/
+      # unless we re-apply group-write + setgid here after each deploy.
+      - name: Fix directory permissions for PHP-FPM cache writes
+        env:
+          SFTP_KEY: ${{ secrets.LANDING_DEV_SFTP_KEY }}
+        run: |
+          set -euo pipefail
+          key_file="$(mktemp)"
+          batch_file="$(mktemp)"
+          printf '%s\n' "$SFTP_KEY" > "$key_file"
+          chmod 600 "$key_file"
+          (cd dist && find . -type d) | sed 's#^\.#chmod 2775 /www#' > "$batch_file"
+          sftp -i "$key_file" -P ${{ secrets.LANDING_DEV_SFTP_PORT }} \
+            -o StrictHostKeyChecking=accept-new \
+            -b "$batch_file" ${{ secrets.LANDING_DEV_SFTP_USERNAME }}@${{ secrets.LANDING_DEV_SFTP_HOST }}
+          rm -f "$key_file" "$batch_file"
+
+      # Deploy user is SFTP-only/chrooted (no shell) -- artisan commands
+      # can't run from this pipeline. After a deploy that changes migrations
+      # or config, an admin runs by hand over `ssh birgeteam.com`:
+      #   cd /var/www/birge-landing-dev/www
+      #   php artisan migrate --force
+      #   php artisan config:cache
+      # See birge-ops/provision-new-stand/new-landing-stand.md.
