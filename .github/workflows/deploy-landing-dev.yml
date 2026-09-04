@@ -58,23 +58,25 @@ jobs:
       # transfers -- same approach as birge-fe's deploy pipelines. No
       # --delete: .env, uploaded media (storage/app/public/media), and the
       # public/storage symlink must survive every redeploy untouched.
+      # --no-perms skips the extra per-file/per-dir chmod round-trip (the
+      # next step re-applies the perms PHP-FPM actually needs anyway).
       - name: Upload the build over SFTP
         run: |
           sudo apt-get update && sudo apt-get install -y lftp
           lftp -c "
             set sftp:connect-program 'ssh -a -x -o StrictHostKeyChecking=accept-new -p ${{ secrets.LANDING_DEV_SFTP_PORT }}';
-            set mirror:parallel-transfer-count 10;
+            set mirror:parallel-transfer-count 30;
             set net:max-retries 2;
             set net:timeout 20;
             open -u ${{ secrets.LANDING_DEV_SFTP_USERNAME }},x sftp://${{ secrets.LANDING_DEV_SFTP_HOST }};
-            mirror -R --parallel=10 --verbose dist/ /www/;
+            mirror -R --parallel=30 --no-perms --verbose dist/ /www/;
           "
 
       # PHP-FPM runs as a different system user than the SFTP deploy account.
-      # The SFTP client above sets 0755 on every directory it uploads
-      # (bypassing the server's umask), so PHP-FPM can't create its own
-      # runtime cache dirs under storage/framework/ or bootstrap/cache/
-      # unless we re-apply group-write + setgid here after each deploy.
+      # New directories land with the server's default umask, so PHP-FPM
+      # can't create its own runtime cache dirs under storage/framework/ or
+      # bootstrap/cache/ unless we re-apply group-write + setgid here after
+      # each deploy.
       - name: Fix directory permissions for PHP-FPM cache writes
         env:
           SFTP_KEY: ${{ secrets.LANDING_DEV_SFTP_KEY }}
