@@ -76,7 +76,9 @@ jobs:
       # New directories land with the server's default umask, so PHP-FPM
       # can't create its own runtime cache dirs under storage/framework/ or
       # bootstrap/cache/ unless we re-apply group-write + setgid here after
-      # each deploy.
+      # each deploy. Walking every directory in the payload with `find` was
+      # hundreds of round-trips over SFTP and dominated deploy time -- only
+      # the fixed set of dirs PHP-FPM actually writes to need this.
       - name: Fix directory permissions for PHP-FPM cache writes
         env:
           SFTP_KEY: ${{ secrets.LANDING_DEV_SFTP_KEY }}
@@ -86,7 +88,21 @@ jobs:
           batch_file="$(mktemp)"
           printf '%s\n' "$SFTP_KEY" > "$key_file"
           chmod 600 "$key_file"
-          (cd dist && find . -type d) | sed 's#^\.#chmod 2775 /www#' > "$batch_file"
+          for dir in \
+            bootstrap/cache \
+            storage \
+            storage/app \
+            storage/app/public \
+            storage/framework \
+            storage/framework/cache \
+            storage/framework/cache/data \
+            storage/framework/sessions \
+            storage/framework/testing \
+            storage/framework/views \
+            storage/logs \
+          ; do
+            echo "chmod 2775 /www/$dir" >> "$batch_file"
+          done
           sftp -i "$key_file" -P ${{ secrets.LANDING_DEV_SFTP_PORT }} \
             -o StrictHostKeyChecking=accept-new \
             -b "$batch_file" ${{ secrets.LANDING_DEV_SFTP_USERNAME }}@${{ secrets.LANDING_DEV_SFTP_HOST }}
