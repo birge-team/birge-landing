@@ -27,25 +27,33 @@ jobs:
       - run: npm run build
 
       # Build in CI, upload the built artifact only -- no composer/npm needed
-      # on the server, mirrors birge-be's pattern. Excludes: .git (not
-      # served), node_modules (not needed at runtime), tests, and anything
-      # that's either a secret (.env) or server-owned runtime state that
-      # must survive redeploys untouched (uploaded media, framework
-      # cache/session/view cache, logs).
+      # on the server, mirrors birge-be's pattern. Allowlist, not a
+      # blacklist: dist/ gets only the dirs Laravel actually needs at
+      # runtime, so any new dev-only file added to the repo root (configs,
+      # docs, tooling) is excluded by default instead of needing a matching
+      # --exclude added here. storage/{framework,logs,app/public} are
+      # server-owned runtime state that must survive redeploys untouched
+      # (framework cache/session/view cache, logs, uploaded media).
       - name: Build deploy payload
         run: |
           set -euo pipefail
           mkdir -p dist
           rsync -a \
-            --exclude=/.git \
-            --exclude=/node_modules \
-            --exclude=/tests \
-            --exclude=/.env \
-            --exclude=/.env.example \
-            --exclude=storage/app/public \
-            --exclude=storage/framework \
-            --exclude=storage/logs \
-            --exclude=/dist \
+            --exclude='/storage/framework/***' \
+            --exclude='/storage/logs/***' \
+            --exclude='/storage/app/public/***' \
+            --include='/artisan' \
+            --include='/app/' --include='/app/**' \
+            --include='/bootstrap/' --include='/bootstrap/**' \
+            --include='/config/' --include='/config/**' \
+            --include='/database/' --include='/database/**' \
+            --include='/lang/' --include='/lang/**' \
+            --include='/public/' --include='/public/**' \
+            --include='/resources/' --include='/resources/**' \
+            --include='/routes/' --include='/routes/**' \
+            --include='/storage/' --include='/storage/**' \
+            --include='/vendor/' --include='/vendor/**' \
+            --exclude='*' \
             . dist/
 
       - uses: webfactory/ssh-agent@v0.9.0
@@ -58,23 +66,27 @@ jobs:
       # transfers -- same approach as birge-fe's deploy pipelines. No
       # --delete: .env, uploaded media (storage/app/public/media), and the
       # public/storage symlink must survive every redeploy untouched.
+      # --no-perms skips the extra per-file/per-dir chmod round-trip (the
+      # next step re-applies the perms PHP-FPM actually needs anyway).
       - name: Upload the build over SFTP
         run: |
           sudo apt-get update && sudo apt-get install -y lftp
           lftp -c "
             set sftp:connect-program 'ssh -a -x -o StrictHostKeyChecking=accept-new -p ${{ secrets.LANDING_SFTP_PORT }}';
-            set mirror:parallel-transfer-count 10;
+            set mirror:parallel-transfer-count 30;
             set net:max-retries 2;
             set net:timeout 20;
             open -u ${{ secrets.LANDING_SFTP_USERNAME }},x sftp://${{ secrets.LANDING_SFTP_HOST }};
-            mirror -R --parallel=10 --verbose dist/ /www/;
+            mirror -R --parallel=30 --no-perms --verbose dist/ /www/;
           "
 
       # PHP-FPM runs as a different system user than the SFTP deploy account.
-      # The SFTP client above sets 0755 on every directory it uploads
-      # (bypassing the server's umask), so PHP-FPM can't create its own
-      # runtime cache dirs under storage/framework/ or bootstrap/cache/
-      # unless we re-apply group-write + setgid here after each deploy.
+      # New directories land with the server's default umask, so PHP-FPM
+      # can't create its own runtime cache dirs under storage/framework/ or
+      # bootstrap/cache/ unless we re-apply group-write + setgid here after
+      # each deploy. Walking every directory in the payload with `find` was
+      # hundreds of round-trips over SFTP and dominated deploy time -- only
+      # the fixed set of dirs PHP-FPM actually writes to need this.
       - name: Fix directory permissions for PHP-FPM cache writes
         env:
           SFTP_KEY: ${{ secrets.LANDING_SFTP_KEY }}
@@ -84,7 +96,21 @@ jobs:
           batch_file="$(mktemp)"
           printf '%s\n' "$SFTP_KEY" > "$key_file"
           chmod 600 "$key_file"
-          (cd dist && find . -type d) | sed 's#^\.#chmod 2775 /www#' > "$batch_file"
+          for dir in \
+            bootstrap/cache \
+            storage \
+            storage/app \
+            storage/app/public \
+            storage/framework \
+            storage/framework/cache \
+            storage/framework/cache/data \
+            storage/framework/sessions \
+            storage/framework/testing \
+            storage/framework/views \
+            storage/logs \
+          ; do
+            echo "chmod 2775 /www/$dir" >> "$batch_file"
+          done
           sftp -i "$key_file" -P ${{ secrets.LANDING_SFTP_PORT }} \
             -o StrictHostKeyChecking=accept-new \
             -b "$batch_file" ${{ secrets.LANDING_SFTP_USERNAME }}@${{ secrets.LANDING_SFTP_HOST }}
